@@ -7,7 +7,6 @@ from sklearn.feature_selection import SelectFromModel
 from sklearn.model_selection import train_test_split
 import joblib
 from sklearn.naive_bayes import GaussianNB
-from sklearn.metrics import confusion_matrix
 
 
 # Read data.csv file
