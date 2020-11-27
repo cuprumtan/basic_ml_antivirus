@@ -1,7 +1,4 @@
-import pefile
 import os
-import array
-import math
 import pickle
 import joblib
 import sys
