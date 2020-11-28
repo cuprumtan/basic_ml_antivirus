@@ -9,6 +9,8 @@ import joblib
 from sklearn.naive_bayes import GaussianNB
 
 
+# выбрать лучше RandomForest
+
 # Read data.csv file
 data = pd.read_csv('dataset.csv', sep=',')
 # X = data.drop(['ID', 'target'], axis=1).values
@@ -31,6 +33,7 @@ features = [x[0]for x in featureScores.nlargest(number_of_features, 'Score')[['S
 
 
 # Train test split
+np.random.seed(0)
 X_train, X_test, y_train, y_test = train_test_split(
     X_new, y, random_state=0)
 
@@ -63,18 +66,19 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 # Compare algorithms
 algorithms = {
-    "GradientBoosting": ske.GradientBoostingClassifier(n_estimators=100, learning_rate=.05),
-    "RandomForest": ske.RandomForestClassifier(n_estimators=100),
+    "GradientBoosting": ske.GradientBoostingClassifier(n_estimators=10, learning_rate=.05),
+    "RandomForest": ske.RandomForestClassifier(n_estimators=10),
     "CVS": svm.SVC(),
     "SGD": linear_model.SGDClassifier(),
-    "DecisionTree": tree.DecisionTreeClassifier(max_depth=10),
-    "AdaBoost": ske.AdaBoostClassifier(n_estimators=100),
+    #"DecisionTree": tree.DecisionTreeClassifier(max_depth=10),
+    "AdaBoost": ske.AdaBoostClassifier(n_estimators=10),
     "GNB": GaussianNB()
 }
 
 results = {}
 print("\nTesting algorithms...")
 for algo in algorithms:
+    np.random.seed(0)
     clf = algorithms[algo]
     clf.fit(X_train, y_train)
     score = clf.score(X_test, y_test)

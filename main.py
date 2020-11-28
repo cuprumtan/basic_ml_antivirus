@@ -42,5 +42,5 @@ if __name__ == '__main__':
     res = clf.predict([pe_features])[0]
     print('The file %s is %s' % (
         os.path.basename(sys.argv[1]),
-        ['malicious', 'legitimate'][res])
+        ['malicious', 'OK'][res])
     )
