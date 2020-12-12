@@ -9,12 +9,8 @@ import joblib
 from sklearn.naive_bayes import GaussianNB
 
 
-# выбрать лучше RandomForest
-
 # Read data.csv file
 data = pd.read_csv('dataset.csv', sep=',')
-# X = data.drop(['ID', 'target'], axis=1).values
-# y = data['target'].values
 
 # ==================================================================
 number_of_features = 14
@@ -37,34 +33,6 @@ np.random.seed(0)
 X_train, X_test, y_train, y_test = train_test_split(
     X_new, y, random_state=0)
 
-# ==================================================================
-
-# print('Searching important feature based on %i total features\n' % X.shape[1])
-# # Feature selection using Trees Classifier
-# fsel = ske.ExtraTreesClassifier().fit(X, y)
-# model = SelectFromModel(fsel, prefit=True)
-# X_new = model.transform(X)
-# nb_features = X_new.shape[1]
-#
-#
-# # Train test split
-# X_train, X_test, y_train, y_test = train_test_split(
-#     X_new, y, random_state=0)
-#
-# features = []
-#
-# print('%i features identified as important:' % nb_features)
-#
-# indices = np.argsort(fsel.feature_importances_)[::-1][:nb_features]
-# for f in range(nb_features):
-#     print("%d. feature %s (%f)" % (
-#         f + 1, data.columns[2 + indices[f]], fsel.feature_importances_[indices[f]]))
-#
-# # Take care of the feature order
-# for f in sorted(np.argsort(fsel.feature_importances_)[::-1][:nb_features]):
-#     features.append(data.columns[2 + f])
-
-#elasticnet
 # Compare algorithms
 algorithms = {
     "GradientBoosting": ske.GradientBoostingClassifier(n_estimators=14, learning_rate=0.1),
