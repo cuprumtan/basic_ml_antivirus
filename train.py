@@ -17,7 +17,7 @@ data = pd.read_csv('dataset.csv', sep=',')
 # y = data['target'].values
 
 # ==================================================================
-number_of_features = 10
+number_of_features = 14
 X = data.iloc[:, 1:15]  # drop 'ID' and 'target'
 y = data.iloc[:, -1]    # features columns
 fsel = SelectKBest(k=number_of_features).fit(X, y)
@@ -64,14 +64,15 @@ X_train, X_test, y_train, y_test = train_test_split(
 # for f in sorted(np.argsort(fsel.feature_importances_)[::-1][:nb_features]):
 #     features.append(data.columns[2 + f])
 
+#elasticnet
 # Compare algorithms
 algorithms = {
-    "GradientBoosting": ske.GradientBoostingClassifier(n_estimators=10, learning_rate=.05),
-    "RandomForest": ske.RandomForestClassifier(n_estimators=10),
-    "CVS": svm.SVC(),
-    "SGD": linear_model.SGDClassifier(),
+    "GradientBoosting": ske.GradientBoostingClassifier(n_estimators=14, learning_rate=0.1),
+    "RandomForest": ske.RandomForestClassifier(n_estimators=14, criterion='entropy', ),
+    "SVC": svm.SVC(),
+    "SGD": linear_model.SGDClassifier(loss='modified_huber', penalty='l1', max_iter=22),
     #"DecisionTree": tree.DecisionTreeClassifier(max_depth=10),
-    "AdaBoost": ske.AdaBoostClassifier(n_estimators=10),
+    "AdaBoost": ske.AdaBoostClassifier(n_estimators=14),
     "GNB": GaussianNB()
 }
 

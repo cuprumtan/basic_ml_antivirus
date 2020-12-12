@@ -1,9 +1,10 @@
+import argparse
+import joblib
 import os
 import pickle
-import joblib
-import sys
-import argparse
+import re
 import signature_finder
+import sys
 
 
 def extract_infos(fpath):
@@ -14,13 +15,17 @@ def extract_infos(fpath):
             for signature in signature_dict.get(key):
                 if signature in binary_file:
                     result_dict[key] = 1
+    for signature_regex in signature_finder.signatures_regex:
+        if re.search(signature_regex, binary_file):
+            result_dict[key] = 1
     return result_dict
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Detect malicious files')
-    parser.add_argument('FILE', help='File to be tested')
-    args = parser.parse_args()
+    # parser = argparse.ArgumentParser(description='Detect malicious files')
+    # parser.add_argument('FILE', help='File to be tested')
+    # args = parser.parse_args()
+
     # Load classifier
     clf = joblib.load(os.path.join(
         os.path.dirname(os.path.realpath(__file__)),
@@ -32,15 +37,23 @@ if __name__ == '__main__':
         'rb').read()
     )
 
-    vector = extract_infos(args.FILE)
-    print('File vector:')
-    print(vector)
+    binary_files = []
+    for dirpath, dirs, files in os.walk('C:\\Users\\cuprumtan\\PycharmProjects\\basic_ml_antivirus\\programs'):
+        for f in files:
+            if not f.endswith('.txt'):
+                binary_files.append(os.path.dirname(dirpath) + '\\' + os.path.basename(dirpath) + '\\' + f)
 
-    pe_features = list(map(lambda x: vector[x], features))
-    print(pe_features)
+    for file in binary_files:
+        vector = extract_infos(file)
+        #print('File vector:')
+        #print(vector)
 
-    res = clf.predict([pe_features])[0]
-    print('The file %s is %s' % (
-        os.path.basename(sys.argv[1]),
-        ['malicious', 'OK'][res])
-    )
+        # f1, f4, f7, f6, f14, f5, f3, f10, f2, f9, f11, f8, f13, f12
+        pe_features = list(map(lambda x: vector[x], features))
+        #print(pe_features)
+
+        res = clf.predict([pe_features])[0]
+        print('The file %s is %s' % (
+            file,
+            ['malicious', 'OK'][res])
+        )
